@@ -5,9 +5,7 @@ canvas.height = window.innerHeight;
 
 let particlesArray;
 
-// instantiate the mouse object. We want
-// the radius around the mouse to scale with
-// the size of the window
+// get mouse position, and create a circle around it
 let mouse = {
     x: null,
     y: null,
@@ -24,7 +22,7 @@ window.addEventListener('mousemove',
 
 // create particle object
 class Particle {
-    consntructor(x, y, directionX, directionY, size, color) {
+    constructor(x, y, directionX, directionY, size, color) {
         console.log('we\'re building a particle and x and y values are ' + x + ' ' + y);
         this.x = x;
         this.y = y;
@@ -99,14 +97,12 @@ function init () {
     for (let i = 0; i < numberOfParticles; i++) {
         let size = (Math.random() * 5) + 1;
         let x = (Math.random() * ((innerWidth - size * 2) - (size * 2) + size * 2));
-        console.log('x is ' + x);
         let y = (Math.random() * ((innerHeight - size * 2) - (size * 2) + size * 2));
-        console.log('y is ' + y);
         let directionX = (Math.random() * 5) - 2.5;
         let directionY = (Math.random() * 5) - 2.5;
         let color = '#8C5523';
 
-        console.log('checking all Particle values passed as params ' + x + ' ' + y + ' ' + directionX + ' ' + directionY + ' ' + size + ' ' + color);
+        console.log('checking all Particle values passed as params x: ' + x + ' y: ' + y + ' directionX: ' + directionX + ' directionY: ' + directionY + ' size: ' + size + ' color: ' + color);
         particlesArray.push(new Particle(x, y, directionX, directionY, size, color))
     }
 }
