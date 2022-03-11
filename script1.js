@@ -1,16 +1,20 @@
-const cavnas = document.getElementById('canvnas1');
+const canvas = document.getElementById('canvas1');
 const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 let particlesArray;
 
+// instantiate the mouse object. We want
+// the radius around the mouse to scale with
+// the size of the window
 let mouse = {
     x: null,
     y: null,
     radius: (canvas.height/80) * (canvas.width/80)
 }
 
+// add event listener to track the location of the mouse
 window.addEventListener('mousemove',
     function(event) {
         mouse.x = event.x;
@@ -18,9 +22,10 @@ window.addEventListener('mousemove',
     }
 );
 
-// create particle
+// create particle object
 class Particle {
     consntructor(x, y, directionX, directionY, size, color) {
+        console.log('we\'re building a particle and x and y values are ' + x + ' ' + y);
         this.x = x;
         this.y = y;
         this.directionX = directionX;
@@ -30,6 +35,9 @@ class Particle {
     }
 
     // method to draw individual particles
+    // note: a full circle is 360 degrees, which is 2 * pi radians.
+    // using the arc method, a circle is an arc which has the starting angle
+    // of 0 and the ending angle of 2 * pi, or 360 degrees
     draw () {
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
@@ -37,9 +45,11 @@ class Particle {
         ctx.fill();
     }
 
-    // check particle position, check mouse positionn, move the particle,
+    // check particle position, check mouse position, move the particle,
     // draw the particle
     update () {
+        // check the particle positon: this reverses the particle if it hits
+        // edge of the screen
         if (this.x > canvas.width || this.x < 0) {
             this.directionX = -this.directionX;
         }
@@ -47,8 +57,11 @@ class Particle {
             this.directionY = -this.directionY;
         }
         
-        // check collision detection - mouse position / particle position
-        let dx = mouse.x - this.y;
+        // collision detection: mouse position & particle position. if the 
+        // distance between the mouse and a particle is less than 
+        // mouse.radius (circle around the mouse) and the size of the particle
+        // then we have a collision and have to move the particle
+        let dx = mouse.x - this.x;
         let dy = mouse.y - this.y;
         let distance = Math.sqrt(dx * dx + dy * dy);
         if (distance < mouse.radius + this.size) {
@@ -79,15 +92,35 @@ class Particle {
 // and a random direction
 function init () {
     particlesArray = [];
+    // want number of particles to scale with canvas size
+    // size * 2 creates a buffer around particle so we don't end up stuck
+    // in the edge
     let numberOfParticles = (canvas.height * canvas.width) / 9000;
     for (let i = 0; i < numberOfParticles; i++) {
         let size = (Math.random() * 5) + 1;
         let x = (Math.random() * ((innerWidth - size * 2) - (size * 2) + size * 2));
-        let y = (Math.random() * ((innerWidth - size * 2) - (size * 2) + size * 2));
+        console.log('x is ' + x);
+        let y = (Math.random() * ((innerHeight - size * 2) - (size * 2) + size * 2));
+        console.log('y is ' + y);
         let directionX = (Math.random() * 5) - 2.5;
         let directionY = (Math.random() * 5) - 2.5;
         let color = '#8C5523';
 
+        console.log('checking all Particle values passed as params ' + x + ' ' + y + ' ' + directionX + ' ' + directionY + ' ' + size + ' ' + color);
         particlesArray.push(new Particle(x, y, directionX, directionY, size, color))
     }
 }
+
+//animation loop
+function animate() {
+    requestAnimationFrame(animate);
+    ctx.clearRect(0,0, innerWidth, innerHeight);
+
+    for (let i = 0; i < particlesArray.length; i++) {
+        particlesArray[i].update();
+    }
+}
+
+init(); // this looks good
+console.log(particlesArray[22]);
+animate();
