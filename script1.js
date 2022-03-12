@@ -57,8 +57,8 @@ class Particle {
         
         // collision detection: mouse position & particle position. if the 
         // distance between the mouse and a particle is less than 
-        // mouse.radius (circle around the mouse) and the size of the particle
-        // then we have a collision and have to move the particle
+        // mouse.radius (circle around the mouse) then we have a collision 
+        // and have to move the particle
         let dx = mouse.x - this.x;
         let dy = mouse.y - this.y;
         let distance = Math.sqrt(dx * dx + dy * dy);
@@ -102,8 +102,26 @@ function init () {
         let directionY = (Math.random() * 5) - 2.5;
         let color = '#8C5523';
 
-        console.log('checking all Particle values passed as params x: ' + x + ' y: ' + y + ' directionX: ' + directionX + ' directionY: ' + directionY + ' size: ' + size + ' color: ' + color);
+        // console.log('checking all Particle values passed as params x: ' + x + ' y: ' + y + ' directionX: ' + directionX + ' directionY: ' + directionY + ' size: ' + size + ' color: ' + color);
         particlesArray.push(new Particle(x, y, directionX, directionY, size, color))
+    }
+}
+
+// check if the particles are close enough to draw a line between them
+function connect() {
+    for (let a = 0; a < particlesArray.length; a++) {
+        for (let b = a; b < particlesArray.length; b++) {
+            let distance = (( particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x) + ( particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
+
+            if (distance < (canvas.width/7) * (canvas.height/7)) {
+                ctx.strokeStyle = 'rgba(140,85,11,1)';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+                ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+                ctx.stroke();
+            }
+        }
     }
 }
 
@@ -115,8 +133,8 @@ function animate() {
     for (let i = 0; i < particlesArray.length; i++) {
         particlesArray[i].update();
     }
+    connect();
 }
 
-init(); // this looks good
-console.log(particlesArray[22]);
+init();
 animate();
