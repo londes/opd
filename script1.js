@@ -23,7 +23,6 @@ window.addEventListener('mousemove',
 // create particle object
 class Particle {
     constructor(x, y, directionX, directionY, size, color) {
-        console.log('we\'re building a particle and x and y values are ' + x + ' ' + y);
         this.x = x;
         this.y = y;
         this.directionX = directionX;
@@ -102,7 +101,6 @@ function init () {
         let directionY = (Math.random() * 5) - 2.5;
         let color = '#737373';
 
-        // console.log('checking all Particle values passed as params x: ' + x + ' y: ' + y + ' directionX: ' + directionX + ' directionY: ' + directionY + ' size: ' + size + ' color: ' + color);
         particlesArray.push(new Particle(x, y, directionX, directionY, size, color))
     }
 }
