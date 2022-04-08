@@ -72,7 +72,7 @@ class Particle {
                 this.y += 10;
             }
             if (mouse.y > this.y && this.y > this.size * 10) {
-                this.x -= 10;
+                this.y -= 10;
             }
         }
         // move particle
@@ -100,7 +100,7 @@ function init () {
         let directionX = (Math.random() * 5) - 2.5;
         let directionY = (Math.random() * 5) - 2.5;
         let color = '#737373';
-
+     
         particlesArray.push(new Particle(x, y, directionX, directionY, size, color))
     }
 }
